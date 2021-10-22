@@ -1,0 +1,59 @@
+
+kubectl exec -it mongo-0 -- mongo
+rs.initiate()
+rs0:PRIMARY> var cfg = rs.conf()
+rs0:PRIMARY> cfg.members[0].host="mongo-0.mongodb-service:27017"
+rs0:PRIMARY> rs.reconfig(cfg)
+rs0:PRIMARY> rs.status()
+rs0:PRIMARY> rs.add("mongo-1.mongodb-service:27017")
+rs0:PRIMARY> rs.add("mongo-2.mongodb-service:27017")
+
+rs.reconfig({
+        "_id" : "rs0",
+        "members" : [
+                {
+                        "_id" : 0,
+                        "host" : "mongo-0.mongodb-service:27017",
+                        "priority" : 1
+                },
+                {
+                        "_id" : 1,
+                        "host" : "mongo-1.mongodb-service:27017",
+                        "priority" : 0.9
+                },
+                {
+                        "_id" : 2,
+                        "host" : "mongo-2.mongodb-service:27017",
+                        "priority" : 0.5
+                }
+        ]
+})
+
+rs.initiate();
+cfg = {
+    _id: 'rs0',
+    members: [{
+        _id: 0,
+        "host": "mongo-0.mongodb-service:27017",
+        priority: 2
+    }, {
+        _id: 1,
+        "host": "mongo-1.mongodb-service:27017",
+        priority: 1
+    }, {
+        _id: 2,
+        "host": "mongo-2.mongodb-service:27017",
+        priority: 1
+    }]
+};
+
+
+kubectl run mongo --rm -it --image mongo -- sh o/p #
+
+mongo mongodb://mongo-0.mongodb-service,mongo-1.mongodb-service,mongo-2.mongodb-service
+
+show dbs
+
+use admin
+
+db.createUser({ user: "test", pwd: "test@123", roles: [ { role: "root", db: "admin" } ] })
