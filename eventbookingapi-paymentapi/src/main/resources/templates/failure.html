@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Braintree Transaction</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" href="/css/app.css" th:href="@{/css/app.css}" />
+  <link rel="icon" type="image/png" href="/images/favicon.png" th:href="@{/images/favicon.png}"/>
+
+</head>
+<body>
+  <header class="main">
+
+  </header>
+
+  <div class="wrapper">
+    <div class="response container">
+      <div class="content">
+        <div class="icon">
+
+          <img th:unless="${isSuccess}" src="/images/fail.svg" th:src="@{/images/fail.svg}" alt="" />
+        </div>
+
+        <div >
+          <h1>Transaction Failed</h1>
+          <section>Your test transaction has a status of <span th:text="${transaction.getStatus()}"/>. Please try again.</section>
+        </div>
+
+
+</body>
+</html>
