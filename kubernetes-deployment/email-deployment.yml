@@ -1,0 +1,71 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: email-service
+spec:
+  selector:
+    app: email-service
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+      nodePort: 30081
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-service
+spec:
+  selector:
+    matchLabels:
+      app: email-service
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: email-service
+    spec:
+      terminationGracePeriodSeconds: 10
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - email-service
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: email-service
+          image: shwetalishine/email-service:1.0
+#          image:  shwetalishine/test-kafka-email:1.0
+          #          image: shwetalishine/test
+          #          imagePullPolicy: Never
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+#          env:
+#            - name: MONGO_USERNAME
+##              value: test
+#              valueFrom:
+#                secretKeyRef:
+#                  name: mongo-secret
+#                  key: username
+#            - name: MONGO_PASSWORD
+##              value: test@123
+#              valueFrom:
+#                secretKeyRef:
+#                  name: mongo-secret
+#                  key: password
+#            - name: MONGO_DB
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: mongo-conf
+#                  key: database
+#            - name: MONGO_HOST
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: mongo-conf
+#                  key: host

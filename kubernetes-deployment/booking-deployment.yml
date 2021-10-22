@@ -1,0 +1,76 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: booking-service
+spec:
+  selector:
+    app: booking-service
+#  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30080
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: booking-service
+spec:
+  selector:
+    matchLabels:
+      app: booking-service
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: booking-service
+    spec:
+      terminationGracePeriodSeconds: 10
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - booking-service
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: booking-service
+          image: shwetalishine/booking-service:1.0
+#          image: shwetalishine/test-kafka-booking:1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+#            - name: MONGO_INITDB_DATABASE
+#              value: admin
+            - name: MONGO_USERNAME
+#              value: test
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: username
+            - name: MONGO_PASSWORD
+#              value: test@123
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: password
+            - name: MONGO_DB
+#              value: admin
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-conf
+                  key: database
+            - name: MONGO_HOST
+#              value : mongodb-service
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-conf
+                  key: host
+#            - name: KAFKA_BROKER
+#              value:  kafka-d-0-0.kafka-0.default.svc.cluster.local:9092
