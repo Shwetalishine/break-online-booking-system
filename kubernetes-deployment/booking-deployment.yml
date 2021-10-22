@@ -40,7 +40,8 @@ spec:
               topologyKey: "kubernetes.io/hostname"
       containers:
         - name: booking-service
-          image: shwetalishine/booking-service:1.0
+          image: shwetalishine/eventbookingapi:1.0
+#          image: shwetalishine/booking-service:1.0
 #          image: shwetalishine/test-kafka-booking:1.0
           imagePullPolicy: Always
           ports:

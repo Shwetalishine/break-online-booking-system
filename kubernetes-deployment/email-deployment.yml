@@ -39,7 +39,8 @@ spec:
               topologyKey: "kubernetes.io/hostname"
       containers:
         - name: email-service
-          image: shwetalishine/email-service:1.0
+          image: shwetalishine/eventbookingapi-email:1.0
+#          image: shwetalishine/email-service:1.0
 #          image:  shwetalishine/test-kafka-email:1.0
           #          image: shwetalishine/test
           #          imagePullPolicy: Never

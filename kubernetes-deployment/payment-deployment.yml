@@ -39,7 +39,8 @@ spec:
               topologyKey: "kubernetes.io/hostname"
       containers:
         - name: payment-service
-          image: shwetalishine/payment-service:1.0
+          image: shwetalishine/eventbookingapi-payment:1.0
+#          image: shwetalishine/payment-service:1.0
 #          image: shwetalishine/test-kafka-payment:1.0
           #          image: shwetalishine/test
           #          imagePullPolicy: Never
