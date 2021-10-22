@@ -1,0 +1,134 @@
+version: "3.8"
+services:
+  zookeeper-1:
+    container_name: zookeeper-1
+    image: shwetalishine/zookeeper:2.7.0
+    build:
+      context: ./zookeeper
+    volumes:
+      - ./config/zookeeper-1/zookeeper.properties:/kafka/config/zookeeper.properties
+    networks:
+        - kafka
+
+  kafka-1:
+    container_name: kafka-1
+    image: shwetalishine/kafka:2.7.0
+    build:
+      context: .
+    volumes:
+      - ./config/kafka-1/server.properties:/kafka/config/server.properties
+      - ./data/kafka-1/:/tmp/kafka-logs/
+    networks:
+      - kafka
+
+  kafka-2:
+    container_name: kafka-2
+    image: shwetalishine/kafka:2.7.0
+    build:
+      context: .
+    volumes:
+      - ./config/kafka-2/server.properties:/kafka/config/server.properties #one volume for config
+      - ./data/kafka-2/:/tmp/kafka-logs/ #one volume for data
+    networks:
+      - kafka
+
+  kafka-3:
+    container_name: kafka-3
+    image: shwetalishine/kafka:2.7.0
+    build:
+      context: .
+    volumes:
+      - ./config/kafka-3/server.properties:/kafka/config/server.properties
+      - ./data/kafka-3/:/tmp/kafka-logs/
+    networks:
+      - kafka
+
+#  kafka-producer:
+#    container_name: kafka-producer
+#    image: shwetalishine/kafka:2.7.0
+#    build:
+#      context: .
+#    working_dir: /kafka
+#    entrypoint: /bin/bash
+#    stdin_open: true
+#    tty: true
+#
+#  kafka-consumer:
+#    container_name: kafka-consumer
+#    image: shwetalishine/kafka:2.7.0
+#    build:
+#      context: .
+#    working_dir: /kafka
+#    entrypoint: /bin/bash
+#    stdin_open: true
+#    tty: true
+  dockermongo:
+    image: mongo:latest
+    container_name: "dockermongo"
+    #    volumes:
+    #      - C:/Users/S/Desktop/database_test:/data/db
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - kafka
+
+  booking:
+    image: shwetalishine/booking-service-docker-compose:1.0
+    container_name: springboot
+    ports:
+      - 8080:8080
+    links:
+      - dockermongo
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: 'kafka-1:9092'
+    depends_on:
+      - kafka-1
+    restart: always
+    networks:
+      - kafka
+
+  email:
+    image: shwetalishine/email-service-docker-compose:1.0
+    container_name: emailservice
+    ports:
+      - 8081:8081
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: 'kafka-1:9092'
+    depends_on:
+      - kafka-1
+    restart: always
+    networks:
+      - kafka
+  dockermongodb:
+    image: mongo:latest
+    container_name: "dockermongodb"
+    ports:
+      - 27018:27017
+    volumes:
+      - ./mongo_data:/data/db
+    networks:
+      - kafka
+  payment:
+    image: shwetalishine/payment-service-docker-compose:1.0
+    container_name: paymentservice
+    ports:
+      - 8082:8082
+    links:
+      - dockermongodb
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: 'kafka-1:9092'
+    depends_on:
+      - kafka-1
+    restart: always
+    networks:
+      - kafka
+
+volumes:
+  kafka_data:
+  mongo_data:
+
+networks:
+  default:
+  kafka:
