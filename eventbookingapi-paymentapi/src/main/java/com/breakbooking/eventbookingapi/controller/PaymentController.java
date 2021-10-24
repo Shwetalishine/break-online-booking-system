@@ -46,14 +46,6 @@ public class PaymentController {
             Transaction.Status.SUBMITTED_FOR_SETTLEMENT
     };
 
-    /* JENKINS TESTING */
-
-    @GetMapping("/home")
-    public String root() {
-        //New feature added
-        System.out.println("Welcome home");
-        System.out.println("test jenkins triggers or not");
-    }
 
     @GetMapping("/")
     public String root() {
