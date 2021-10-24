@@ -51,7 +51,7 @@ public class PaymentController {
     @GetMapping("/home")
     public void home() {
         //New feature added
-        System.out.println("Welcome home");
+        System.out.println("Welcome to payment service");
         System.out.println("test jenkins triggers or not");
     }
 
