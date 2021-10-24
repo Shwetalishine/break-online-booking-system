@@ -8,14 +8,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -152,6 +158,25 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findAll(Sort.by(Sort.Direction.ASC, field));
     }
 
+//    @Autowired
+//    MongoTemplate mongoTemplate;
+
+//    @Override
+//    public List<Event> findAllEventsLessThanPrice(String price) {
+//
+//        try {
+//            BigDecimal amount = new BigDecimal(price);
+//            System.out.println("********************************");
+//            System.out.println(price);
+//            System.out.println(amount);
+//            Query query = new Query(Criteria.where("price").lte(price));
+//            return mongoTemplate.find(query, Event.class);
+//        } catch (ArithmeticException e) {
+//            e.getStackTrace();
+//            return null;
+//        }
+
+    }
 
 
 
@@ -208,4 +233,4 @@ public class EventServiceImpl implements EventService {
 //
 //		return null;
 //    }
-}
+//}

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/break-online-booking-system.iml" filepath="$PROJECT_DIR$/.idea/break-online-booking-system.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eventbookingapi/eventbookingapi.iml" filepath="$PROJECT_DIR$/eventbookingapi/eventbookingapi.iml" />
     </modules>
   </component>
 </project>
