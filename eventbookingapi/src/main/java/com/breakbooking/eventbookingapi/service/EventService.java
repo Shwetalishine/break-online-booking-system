@@ -26,5 +26,7 @@ public interface EventService {
 
     List<Event> findEventsWithSorting(String field);
 
+
+
 //    List<Event> findAllEventsLessThanPrice(String price);
 }

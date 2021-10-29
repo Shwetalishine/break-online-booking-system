@@ -1,5 +1,6 @@
 package com.breakbooking.eventbookingapi.repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -28,4 +29,10 @@ public interface EventRepository extends MongoRepository<Event, String>{
 
 	@Query(value="{ 'startTime' : { $gte: ?0, $lte: ?1 } }")
 	List<Event> findByEventsBetween(LocalDateTime start, LocalDateTime end);
+
+
+//	db.event.find({$expr : {$lte : [{$toDouble:"$price"},99.99]}})
+//	db.event.find({$expr : {$gte : [{$toDouble:"$price"},99]}}).pretty()
+//	@Query(value = "{$expr : {$lte : [{$toDouble:'$price'}, 9]}}")
+//	List<Event> findAllEventsLessThanPrice(BigDecimal amount);
 }

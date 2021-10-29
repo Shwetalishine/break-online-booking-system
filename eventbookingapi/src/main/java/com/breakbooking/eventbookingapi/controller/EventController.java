@@ -142,15 +142,15 @@ public class EventController {
 
 
     /* GET ALL EVENTS WITH PRICE GREATER THAN  */
+/*
 
+    @GetMapping("/price")
+    @ApiOperation(value = "Get all events with price greater than")
+    public ResponseEntity<?> findAllEventsLessThanPrice(@RequestParam ("price") String price) {
 
-//    @GetMapping("/price")
-//    @ApiOperation(value = "Get all events with price greater than")
-//    public ResponseEntity<?> findAllEventsLessThanPrice(@RequestParam ("price") String price) {
-//
-//        return new ResponseEntity<>(eventService.findAllEventsLessThanPrice(price), HttpStatus.OK);
-//
-//    }
+        return new ResponseEntity<>(eventService.findAllEventsLessThanPrice(price), HttpStatus.OK);
+
+    }*/
 
 
 }

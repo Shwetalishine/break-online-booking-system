@@ -158,25 +158,21 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findAll(Sort.by(Sort.Direction.ASC, field));
     }
 
-//    @Autowired
+/*   @Autowired
 //    MongoTemplate mongoTemplate;
 
-//    @Override
-//    public List<Event> findAllEventsLessThanPrice(String price) {
-//
-//        try {
-//            BigDecimal amount = new BigDecimal(price);
-//            System.out.println("********************************");
-//            System.out.println(price);
-//            System.out.println(amount);
-//            Query query = new Query(Criteria.where("price").lte(price));
-//            return mongoTemplate.find(query, Event.class);
-//        } catch (ArithmeticException e) {
-//            e.getStackTrace();
-//            return null;
-//        }
+    @Override
+    public List<Event> findAllEventsLessThanPrice(String price) {
+//        Query query=new Query().addCriteria(Criteria.where("$price").lt(price));
+//        List<Event> events=mongoTemplate.find(query,Event.class);
 
-    }
+//        BigDecimal amount=new BigDecimal(price);
+//        List<Event> events=eventRepository.findAllEventsLessThanPrice(amount);
+//        return events;
+    }*/
+
+
+}
 
 
 
