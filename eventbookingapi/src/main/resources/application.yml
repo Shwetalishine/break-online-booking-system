@@ -23,6 +23,7 @@ server:
 #            trusted:
 #              packages: '*'
 
+
 #config for kubernetes database host
 
 #  application:
