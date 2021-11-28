@@ -1,6 +1,9 @@
-#spring:
-#  profiles:
-#    active: dev
+spring:
+  profiles:
+    active: dev
+
+server:
+  port: 8080
 #  kafka:
 ##    bootstrapAddress: localhost:9092
 #    bootstrapAddress: ["kafka-2.default.svc.cluster.local:9092"]
@@ -19,10 +22,9 @@
 #          json:
 #            trusted:
 #              packages: '*'
-#
-#
-#
-#
+
+#config for kubernetes database host
+
 #  application:
 #    name: booking-service
 #  data:
