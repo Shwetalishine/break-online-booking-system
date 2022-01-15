@@ -1,0 +1,62 @@
+
+def imageName="eventbookingapi-paymentapi"
+def tag="latest"
+node{
+
+    stage('SCM Checkout'){
+    git (credentialsId: 'git-credentials', url: 'https://github.com/Shwetalishine/break-online-booking-system.git', branch: 'main')
+    }
+    stage('Mvn Package'){
+        dir('eventbookingapi-paymentapi'){
+        bat "mvn clean package"
+
+        }
+
+    }
+
+    stage('Build Docker Image'){
+        dir('eventbookingapi-paymentapi'){
+              bat 'docker build -t shwetalishine/eventbookingapi-paymentapi:1.0 .'
+        }
+    }
+
+    stage('Push Docker Image'){
+
+        withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockeHubPass')]) {
+
+        dir('eventbookingapi-paymentapi'){
+          bat "docker login -u shwetalishine -p ${dockeHubPass}"
+
+        }
+    }
+
+
+        bat 'docker push shwetalishine/eventbookingapi-paymentapi:1.0'
+        echo "image pushed to docker hub successfully"
+}
+
+
+    // stage('SSH Into k8s Server'){
+    //     def  remote = [:]
+    //     remote.name = 'K8s master'
+    //     remote.host= '192.168.49.2'
+    //     remote.allowAnyHosts = true
+    //     stage ('Put k8s-deployment files onto-k8master'){
+
+    //         sshPut remote: remote, from: 'kubernetes-deployment/payment-deployment.yml', into: '.'
+
+
+    // }
+
+    // }
+
+        stage('K8SDeploy'){
+        kubernetesDeploy(
+            configs: 'booking-deployment.yml',
+            kubeconfigId: 'K8S',
+            enableConfigSubstitution: true
+            )
+    }
+
+
+}

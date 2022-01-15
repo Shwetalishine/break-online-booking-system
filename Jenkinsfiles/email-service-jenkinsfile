@@ -1,0 +1,36 @@
+
+def imageName="eventbookingapi-emailapi"
+def tag="latest"
+node{
+
+    stage('SCM Checkout'){
+    git (credentialsId: 'git-credentials', url: 'https://github.com/Shwetalishine/break-online-booking-system.git', branch: 'main')
+    }
+    stage('Mvn Package'){
+        dir('eventbookingapi-emailapi'){
+        bat "mvn clean package"
+        }
+
+    }
+
+    stage('Build Docker Image'){
+        dir('eventbookingapi-emailapi'){
+              bat 'docker build -t shwetalishine/eventbookingapi-emailapi:1.0 .'
+        }
+    }
+
+    stage('Push Docker Image'){
+
+        withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockeHubPass')]) {
+
+        dir('eventbookingapi-emailapi'){
+          bat "docker login -u shwetalishine -p ${dockeHubPass}"
+        }
+        }
+
+
+        bat 'docker push shwetalishine/eventbookingapi-emailapi:1.0'
+        echo "image pushed to docker hub successfully"
+    }
+
+   }

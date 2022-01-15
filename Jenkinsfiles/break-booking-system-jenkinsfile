@@ -1,0 +1,37 @@
+
+def imageName="eventbookingapi"
+def tag="latest"
+node{
+
+    stage('SCM Checkout'){
+    // git (credentialsId: 'git-credentials', url: 'https://github.com/Shwetalishine/break-online-booking-system.git', branch: 'main')
+    git branch: 'main', credentialsId: 'git-credentials', url: 'https://github.com/Shwetalishine/break-online-booking-system.git'
+    }
+    stage('Mvn Package'){
+        dir('eventbookingapi'){
+        bat "mvn clean package"
+        }
+
+    }
+
+    stage('Build Docker Image'){
+        dir('eventbookingapi'){
+              bat 'docker build -t shwetalishine/eventbookingapi:1.0 .'
+        }
+    }
+
+    stage('Push Docker Image'){
+
+        withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockeHubPass')]) {
+
+        dir('eventbookingapi'){
+          bat "docker login -u shwetalishine -p ${dockeHubPass}"
+        }
+        }
+
+
+        bat 'docker push shwetalishine/eventbookingapi:1.0'
+        echo "image pushed to docker hub successfully"
+    }
+
+   }
